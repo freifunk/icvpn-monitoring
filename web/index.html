@@ -1,0 +1,98 @@
+<html data-ng-app="icvpnmeta">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js" type="text/javascript"></script>
+
+     <link rel="stylesheet" href="index.css">
+     <script src="index.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="jumbotron">
+          <h1>Freifunk Inter City VPN Monitoring</h1>
+          <p>
+            Auf dieser Seite findest Du aktuelle Informationen zum Status der einzelnen Teilnehmer des <a href="http://wiki.freifunk.net/Icvpn" target="_blank">ICVPN</a>. Freifunk ist dezentral organisiert. Es existieren verschiedene Communities in verschiedenen St&auml;dten. Das Inter City VPN transportiert Daten zwischen den verschiedenen Communities. Hier wird der Status, der an das ICVPN angebundenen Router sowie deren Routen, gesammelt und dargestellt. Weitere Informationen &uuml;ber die Quellen der verwendeten Daten sowie Kontaktdaten findest du <a href="/info">hier</a>.
+          </p>
+        </div>
+      </div>
+      <div data-ng-controller="connectionsTable" class="row">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td>#</td>
+              <td>Name</td>
+              <td>Status v4</td>
+              <td>Since</td>
+              <td>Info</td>
+              <td>Status v6</td>
+              <td>Since</td>
+              <td>Info</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="clickable" data-ng-repeat-start="connection in connections" data-ng-click="toggle(connection)">
+              <td>{{$index +1}}</td>
+              <td>{{connection.name}}</td>
+              <td data-ng-class="{ 'bg-success' : connection.v4.connection == 'Established' }">{{connection.v4.connection}}</td>
+              <td>{{connection.v4.since}}</td>
+              <td>{{connection.v4.info}}</td>
+              <td data-ng-class="{ 'bg-success' : connection.v6.connection == 'Established' }">{{connection.v6.connection}}</td>
+              <td>{{connection.v6.since}}</td>
+              <td>{{connection.v6.info}}</td>
+              <td>
+                <span class="glyphicon glyphicon-menu-right" aria-hidden="true" data-ng-show="!connection.showDetails"></span>
+                <span class="glyphicon glyphicon-menu-down" aria-hidden="true" data-ng-show="connection.showDetails"></span>
+              </td>
+            </tr>
+            <tr data-ng-repeat-end data-ng-show="connection.showDetails">
+              <td colspan='5'>
+                <div>
+                  <h2>Community Networks v4</h2>
+                  <p>AS: {{connection.as}}</p>
+                  <h3>Routen:</h3>
+                  <ul class="list-unstyled">
+                  <li data-ng-repeat="route in connection.currentbgp.v4.routes">
+                    <span>{{route}} </span>
+                    <span data-ng-class="{ 'label label-success' : connection.networks.ipv4.indexOf(route) > -1, 'label label-info' : connection.networks.ipv4.indexOf(route) == -1 }">in table</span>
+                  </li>
+                  </ul>
+                  <ul class="list-unstyled">
+                    <li data-ng-repeat="network in connection.networks.ipv4 | unroutedNetworks:connection.currentbgp.v4.routes">
+                      <span>{{network}} </span><span class="label label-warning">not in table</span>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <p data-ng-repeat="tinc in connection.currentbgp.v4.tinc">
+                  <img src="{{tinc.imgsrc}}">
+                   </p>
+                </div>
+              </td>
+              <td colspan='4'>
+                <div>
+                  <h2>Community Networks v6</h2>
+                  <p>AS {{connection.as}}</p>
+                  <h3>Routen:</h3>
+                  <ul class="list-unstyled">
+                    <li data-ng-repeat="route in connection.currentbgp.v6.routes">
+                      <span>{{route}} </span>
+                      <span data-ng-class="{ 'label label-success' : connection.networks.ipv6.indexOf(route) > -1, 'label label-info' : connection.networks.ipv6.indexOf(route) == -1 }">in table</span>
+                    </li>
+                  </ul>
+                  <ul class="list-unstyled">
+                    <li data-ng-repeat="network in connection.networks.ipv6 | unroutedNetworks:connection.currentbgp.v6.routes">
+                      <span>{{network}} </span><span class="label label-warning">not in table</span>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html
