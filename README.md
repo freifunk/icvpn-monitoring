@@ -1,5 +1,5 @@
 # icvpn-monitoring
-Monitoring of BGP sessions in our Inter City VPN
+Monitoring of BGP sessions in [our Inter City VPN](http://icvpn.wg1337.de)
 
 ## web
 The website is a simple angularjs application that presents data read from a sessions.js. The sessions.js contains information about BGP sessions in JSON format.
@@ -18,7 +18,7 @@ If you want to keep the information on the web page up to date schedule some tak
 1. Clone [icvpn-meta](https://github.com/freifunk/icvpn-meta) repository
 2. Change [dataPath](https://github.com/freifunk/icvpn-monitoring/blob/master/scripts/node/BirdToJSON.js#L7) variable in BirdToJSON.js to the parent folder of the icvpn-meta data folder
 3. Chage [webDataPath](https://github.com/freifunk/icvpn-monitoring/blob/master/scripts/node/BirdToJSON.js#L9) in BirdToJSON.js to data folder you created in step 2 of web setup
-4. Install BirdToJSON.js node dependencies
+4. Install BirdToJSON.js node dependencies ([BirdSocket](https://github.com/geirkairam/birdsocket), yamljs, when, q)
 5. Run BirdToJSON.js Node script
 
 
