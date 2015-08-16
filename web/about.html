@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="jumbotron">
+          <h1>Freifunk ICVPN Monitoring About</a>
+          <p>
+            Das Monitoring-System nutzt als Quelle f&uuml;r die konfigurierten BGP-Sessions folgendes GIT:
+          </p>
+          <p>
+            <a role="button" target="blank" href="/web/20140922014630/https://github.com/freifunk/icvpn-meta" class="btn btn-primary btn-lg">
+              ICVPN-META auf GitHub <span class="glyphicon glyphicon-arrow-right"></span>
+            </a>
+          </p>
+          <p>
+            Die Schl&uuml;ssel f&uuml;r die darunterliegende tinc-Verbindung werden dem folgenden GIT entnommen:
+          </p>
+          <p>
+            <a role="button" target="blank" href="/web/20140922014630/https://github.com/freifunk/icvpn" class="btn btn-primary btn-lg">
+              ICVPN auf GitHub <span class="glyphicon glyphicon-arrow-right"></span>
+            </a>
+          </p>
+          <p>
+            Die Aktualisierung der Konfiguration f&uuml;r die TINC-Verbindungen sowie der BGP-Sessions erfolgt 4 mal pro Tag. Falls das Monitoring veraltete Daten anzeigt aktualisiere bitte die Daten deiner Community in einem oder beiden oben genannten GIT Repos.
+          </p>
+          <p>
+            Auf dieser Seite werden die jeweils letzten Zeitpunkte dargestellt zu denen Prozesse des Monitorings abgelaufen sind. Falls zu irgendeinem Zeitpunkt keine aktuellen Daten auf diesen Seiten dargestellt werden, trotzdem die Daten im icvpn-meta GIT aktuell sind, ist das jeweilige Update eventuell noch nicht erfolgt.
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="div panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                Update tincd config<span style="float:right">vor 3 Stunden und 46 Minuten</span>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <p>
+                Aktualisiert die in tincd konfigurierten Partnermit den Informationen des icvpn GIT.Repositories.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="div panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                Update bird bgp peer config<span style="float:right">vor 3 Stunden und 31 Minuten</span>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <p>
+                Generiert die Liste der BGP-Peers anhand der Daten aus dem icvpn-meta GIT. Bird baut die BGP-Sessions zu anderen Teilnehmern am ICVPN auf.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h1<Contact</h1>
+          <p>
+            Kontakt f&uuml;r diese Seite: <a href="mailto:icvpn@wg1337.de">icvpn@wg1337.de</a>
+          </p>
+          <p>
+            Mailingliste des Freifunk ICVPN: <a target="_blank" href="https://lists.funkfeuer.at/mailman/listinfo/icvpn">lists.funkfeuer.at/mailman/listinfo/icvpn</a>
+          </p>
+          <p>
+            Code: <a target="_blank" href="https://github.com/freifunk/icvpn-monitoring">Github Repository</a>
+          </p>
+          <p>
+          Issues: <a target="_blank" href="https://github.com/freifunk/icvpn-monitoring/issues">on Github</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
