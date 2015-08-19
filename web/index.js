@@ -1,18 +1,21 @@
 var icvpnmeta = angular.module('icvpnmeta',[]);
 
 icvpnmeta.controller('connectionsTable', function($scope, $http) {
-  $scope.metaInfo = {};
+  $scope.metaInfo = {lastRun: {}};
 
   $http.get("data/sessions.js")
         .success(function (data) {
             $scope.connections = data;
         });
 
-  $http.get("data/lastRunBirdToJSON.txt")
+  $http.get("data/lastrun-update-sessioninfo.txt")
     .success(function(data) {
-      console.log(data);
-      $scope.metaInfo.lastRun = data;
-      console.log($scope.metaInfo.lastRun);
+      $scope.metaInfo.lastRun.updateessioninfo = data;
+    });
+
+  $http.get("data/lastrun-update-icvpnmeta-gitrepo.txt")
+    .success(function(data) {
+      $scope.metaInfo.lastRun.updateicvpnmeta = data;
     });
 
   $scope.toggle = function(connection) {
