@@ -29,9 +29,12 @@ var promises = [];
 
 //get v4  and v6 routes
 for (var a=0; a<communityMetaDataList.length; a++) {
-  if (typeof(communityMetaDataList[a].asn) != 'undefined') {
-    promises.push(new BirdSocket().getRoutesByAS(4, communityMetaDataList[a].asn));
-    promises.push(new BirdSocket().getRoutesByAS(6, communityMetaDataList[a].asn));
+  var communityMetaData = communityMetaDataList[a];
+  if (isValid(communityMetaData)) {
+    for (property in communityMetaData.bgp) {
+      promises.push(new BirdSocket().getRoutesBySession(4, communityMetaData.asn, property));
+      promises.push(new BirdSocket().getRoutesBySession(6, communityMetaData.asn, property));
+    }
   }
 }
 
@@ -45,51 +48,46 @@ promises.push(new BirdSocket().showProtocols(6));
  * combine everything
  */
 when.all(promises).then(function(data) {
-
-  //combine v4 and v6 routes for as
-  var dataIndex = 0
-  for (var i=0; i<communityMetaDataList.length; i++) {
-    //skip communities with missing AS because we also skipped them on promise creation
-    if (typeof(communityMetaDataList[i].asn) != 'undefined') {
-      communityMetaDataList[i].v4 = {};
-      communityMetaDataList[i].v4.routes = data[dataIndex];
-      communityMetaDataList[i].v6 = {};
-      communityMetaDataList[i].v6.routes = data[dataIndex+1];
-      dataIndex = dataIndex+2;
-    }
-  }
-
-
+  console.log(data);
   var v4sessions = data[(data.length-2)];
   var v6sessions = data[(data.length-1)];
   var sessions = [];
 
-  //meh this is ugly >:(
-  for (var k=0; k< v4sessions.length; k++) {
-    //combine v4 and v6 sessions
-    var session = {
-      name: v4sessions[k].name,
-      v4: v4sessions[k].v4,
-    };
-    for (var j=0; j<v6sessions.length; j++) {
-      if (v4sessions[k].name == v6sessions[j].name) {
-        session.v6 = v6sessions[j].v6;
-        break;
+  //combine v4 and v6 routes for session
+  var dataIndex = 0
+  for (var i=0; i<communityMetaDataList.length; i++) {
+    var communityMetaData = communityMetaDataList[i];
+    //skip communities with missing AS because we also skipped them on promise creation
+    if (isValid(communityMetaData)) {
+      for (property in communityMetaData.bgp) {
+        console.log('>>> COMBINE DATA');
+        var v4sessionData = findSessionByName(v4sessions, property);
+        var v4session = {};
+        if (typeof(v4sessionData) != 'undefined') {
+          v4session = v4sessionData.v4;
+        }
+
+        var v6sessionData = findSessionByName(v6sessions, property);
+        var v6session = {};
+        if (typeof(v6sessionData) != 'undefined') {
+          v6session = v6sessionData.v6;
+        }
+        var session = {
+          name: property,
+          as: communityMetaData.asn,
+          networks : communityMetaData.networks,
+          v4: v4session,
+          v6: v6session,
+          currentbgp: {
+            v4: data[dataIndex],
+            v6: data[dataIndex+1]
+          }
+        };
+        dataIndex = dataIndex+2;
+        sessions.push(session);
+        console.log('<<< COMBINE DATA');
       }
     }
-    for (var l=0; l<communityMetaDataList.length; l++) {
-      var communityBGP = communityMetaDataList[l].bgp;
-      //TODO add routes per session here
-      if (typeof(communityBGP) != 'undefined' && communityBGP.hasOwnProperty(session.name)) {
-        session.currentbgp = {};
-        session.as = communityMetaDataList[l].asn;
-        session.networks = communityMetaDataList[l].networks;
-        session.currentbgp.v4 = communityMetaDataList[l].v4;
-        session.currentbgp.v6 = communityMetaDataList[l].v6;
-        break;
-      }
-    }
-    sessions.push(session);
   }
 
   // write all to a file
@@ -100,3 +98,14 @@ when.all(promises).then(function(data) {
   });
 });
 
+function isValid(communityMetaData) {
+  return typeof(communityMetaData.asn) != 'undefined' && typeof(communityMetaData.bgp) != 'undefined';
+}
+
+function findSessionByName(sessions, name) {
+  for (var i=0;i<sessions.length;i++) {
+    if (sessions[i].name == name) {
+      return sessions[i];
+    }
+  }
+}
