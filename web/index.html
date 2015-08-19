@@ -35,7 +35,7 @@
           <tbody>
             <tr class="clickable" data-ng-repeat-start="connection in connections" data-ng-click="toggle(connection)">
               <td>{{$index +1}}</td>
-              <td>{{connection.name}}</td>
+              <td>{{connection.name}} ({{connection.as}})</td>
               <td data-ng-class="{ 'bg-success' : connection.v4.connection == 'Established' }">{{connection.v4.connection}}</td>
               <td>{{connection.v4.since}}</td>
               <td>{{connection.v4.info}}</td>
@@ -52,7 +52,6 @@
                 <div>
                   <h2>Community Networks v4</h2>
                   <p data-ng-show="connection.currentbgp.v4.error" class="text-warning">{{connection.currentbgp.v4.error}}</p>
-                  <p>AS: {{connection.as}}</p>
                   <div data-ng-hide="connection.currentbgp.v4.error">
                     <h3>Routen:</h3>
                     <ul class="list-unstyled">
@@ -73,7 +72,6 @@
                 <div>
                   <h2>Community Networks v6</h2>
                   <p data-ng-show="connection.currentbgp.v6.error" class="text-warning">{{connection.currentbgp.v6.error}}</p>
-                  <p>AS {{connection.as}}</p>
                   <div data-ng-hide="connection.currentbgp.v6.error">
                     <h3>Routen:</h3>
                     <ul class="list-unstyled">
